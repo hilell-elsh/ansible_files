@@ -1,0 +1,4 @@
+- name: Install Flannel network plugin
+  command: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+  environment:
+    KUBECONFIG: /home/do21/.kube/config

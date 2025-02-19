@@ -1,0 +1,30 @@
+- name: Initialize Kubernetes Master
+  command: kubeadm init --pod-network-cidr=10.244.0.0/16
+  register: kubeadm_init
+  changed_when: "'This node has joined the cluster' not in kubeadm_init.stdout"
+
+- name: Create Kubernetes config directory
+  file:
+    path: /home/do21/.kube
+    state: directory
+    owner: do21
+    group: do21
+    mode: 0755
+
+- name: Copy admin kubeconfig
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/do21/.kube/config
+    remote_src: yes
+    owner: do21
+    group: do21
+    mode: 0644
+
+- name: Get the join command
+  shell: kubeadm token create --print-join-command
+  register: join_command
+  changed_when: false
+
+- name: Save the join command
+  set_fact:
+    kube_join_command: "{{ join_command.stdout }}"

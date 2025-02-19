@@ -1,0 +1,23 @@
+- name: Install Kubernetes Cluster
+  hosts: cluster
+  become: true
+  roles:
+    - common
+
+- name: Initialize Kubernetes Master
+  hosts: master
+  become: true
+  roles:
+    - master
+
+- name: Setup Worker Nodes
+  hosts: workers
+  become: true
+  roles:
+    - worker
+
+- name: Deploy Network Plugin
+  hosts: master
+  become: true
+  roles:
+    - network

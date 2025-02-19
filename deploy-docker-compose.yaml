@@ -1,0 +1,50 @@
+- name: Deploy Nginx Docker Compose Service
+  hosts: nginx
+  become: true
+  tasks:
+    - name: Create application directory
+      file:
+        path: /home/do21/app
+        state: directory
+        owner: do21
+        group: do21
+        mode: '0755'
+
+    - name: Copy `nginx-compose.yaml`
+      copy:
+        src: ./nginx-compose.yaml
+        dest: /home/do21/app/nginx-compose.yaml
+        owner: do21
+        group: do21
+        mode: '0644'
+
+    - name: Start Docker Compose service
+      command: docker-compose -f nginx-compose.yaml up -d
+      args:
+        chdir: /home/do21/app
+
+
+- name: Deploy GitLab Docker Compose Service
+  hosts: gitlab
+  become: true
+  tasks:
+    - name: Create application directory
+      file:
+        path: /home/do21/app
+        state: directory
+        owner: do21
+        group: do21
+        mode: '0755'
+
+    - name: Copy `gitlab-compose.yaml`
+      copy:
+        src: ./gitlab-compose.yaml
+        dest: /home/do21/app/gitlab-compose.yaml
+        owner: do21
+        group: do21
+        mode: '0644'
+
+    - name: Start Docker Compose service
+      command: docker-compose -f gitlab-compose.yaml up -d
+      args:
+        chdir: /home/do21/app
